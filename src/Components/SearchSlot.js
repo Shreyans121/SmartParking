@@ -6,35 +6,42 @@ import { TextField, Button} from '@material-ui/core';
 // import ParkingSpots from "./ParkingSpots";
 import "./SearchCar.css";
 
-const SearchCar = (props) => {
+const SearchSlot = (props) => {
 
-    const [plateToSearch, setPlateToSearch] = useState("");
-    const [carsToShow, setCarsToShow] = useState([]);
+    const [slotToSearch, setSlotToSearch] = useState(0);
+    const [mapToShow, setMapToShow] = useState({});
 
-
-    const getTime = (str)=>{
-        // const t = Date(str);
-        return(
-            <div>
-                {moment(str).fromNow()}
-            </div>
-        )
-    }
-
-
-    const showSearchedPlates = () => {
-        
-        console.log(carsToShow.length)
-        if(carsToShow.length > 0)
+    const maps_arr = [
         {
+            slot : 102,
+            link : "https://maps.app.goo.gl/qr46ViKJA6DWexBx9",
+            floor : 1,
+            block : "B"
+        },
+        {
+            slot : 302,
+            link : "https://maps.app.goo.gl/rAySCbx3YFiouCK58",
+            floor : 3,
+            block : "D"
+        }
+    ]
+
+
+    const showSearchedSlot = () => {
+        
+        // console.log(carsToShow.length)
+        if(mapToShow.slot)
+        {
+
+            console.log("map", mapToShow)
 
         return(
             
             <div>
                 <div>
-                    <h3> Car arrived at : </h3>
+                    <h3> Location : <span> <a href={mapToShow.link} target = "_blank"> Here </a> </span>  </h3>
                 </div>
-
+{/* 
                 <div>
                     <ol>
                         {
@@ -53,7 +60,7 @@ const SearchCar = (props) => {
                             })
                         }
                     </ol>
-                </div>
+                </div> */}
             </div>
         )
 
@@ -62,15 +69,29 @@ const SearchCar = (props) => {
 
     const handleSubmit = (e) => {
         e.preventDefault();
-
-        setCarsToShow( props.allPlates.map( (plate) => {
-            if(plate.numberPlate == plateToSearch)
+        let flag = false;
+        for(let i=0; i<2; i++)
+        {
+            if(maps_arr[i].slot == slotToSearch)
             {
-                return( 
-                    plate
-                )    
+                setMapToShow(maps_arr[i]);
+                flag = true;
             }
-        } ).reverse() )
+        }
+
+        if(flag == false)
+        {
+            setMapToShow({});
+        }
+
+        // setCarsToShow( props.allPlates.map( (plate) => {
+        //     if(plate.numberPlate == plateToSearch)
+        //     {
+        //         return( 
+        //             plate
+        //         )    
+        //     }
+        // } ).reverse() )
 
 
     }
@@ -78,11 +99,11 @@ const SearchCar = (props) => {
     return (
 
         <div style={{ margin: "2rem" }} >
-            <h3>Search For a Car </h3>
+            <h3>Search For a Slot Location </h3>
             
             <div className="searchbar">
                 <form autoComplete="off"  onSubmit={handleSubmit}>
-                    <TextField className="search" name="searched" variant="outlined" label="searched"  value={plateToSearch} onChange={(e) => setPlateToSearch(e.target.value)} />
+                    <TextField className="search" name="searched" variant="outlined" label="searched"  value={slotToSearch} onChange={(e) => setSlotToSearch(e.target.value)} />
                     {/* <TextField name="message" variant="outlined" label="Message" fullWidth multiline rows={4} value={postData.message} onChange={(e) => setPostData({ ...postData, message: e.target.value })} /> */}
                    
                     <Button className="submit" variant="contained" color="primary" size="large" type="submit" >Submit</Button>
@@ -92,7 +113,7 @@ const SearchCar = (props) => {
         
             <div style={{ margin: "2rem" }} >
 
-            { showSearchedPlates() }
+            { showSearchedSlot() }
                 
             </div>
         
@@ -101,4 +122,4 @@ const SearchCar = (props) => {
     );
 };
 
-export default SearchCar;
+export default SearchSlot;
